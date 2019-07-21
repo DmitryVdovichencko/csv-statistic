@@ -1,7 +1,4 @@
 import '../scss/style.scss';
-
-
-
 import * as data from './data'
 import * as importData from './import'
 import * as exportData from './export'
@@ -14,7 +11,7 @@ import * as exportData from './export'
 
 
 
-const weight=[]; let filterArr;
+let filterArr;
 
 const getElement=(id)=>{
 	return document.querySelector(`#${id}`)
@@ -25,26 +22,12 @@ const weightData = getElement("weight"),
 	  ch2Data = getElement("ch2"),
 	  ch3Data = getElement("ch3");
 
-
+const weight=[], tare=[];
 weightData.addEventListener('change', function(){
 	
 	
-	importData.getData(weightData.files[0])
-	.then(
-		results => data.convert(results) 
-		)
-	.then(
-		results => {
-			weight.push(...results);
-			return Promise.resolve(weight);
-			}
-		)
-	.then(
-		weight => exportData.unparse(weight)
-	)
-	.then(
-		csv => exportData.write(csv,"weight")
-		)
+	importData.getData(weightData.files[0],weight,"weight",true)
+
 
 	
 
@@ -53,22 +36,17 @@ weightData.addEventListener('change', function(){
 
 
 	);
-tareData.addEventListener('change', function(){
-	importData.getData(tareData.files[0])
-	.then(
-		results => data.convert(results) 
-		)
-	.then(
-		filteringArr => {
-			// get base filter array
-			importData.getData(weightData.files[0])
-			.then(
-				filterArr => data.filterData(data.setTimeFilter(5000, weight),filteringArr) 
-			)
 
-		}
-		
-	);
+tareData.addEventListener('change', function(){
+	
+	importData.getData(
+		tareData.files[0],
+		tare,
+		"tare",
+		true,
+		function(){return data.filterData(data.setTimeFilter(5000, weight),tare)} 
+		)
+
 })
 	
 // const fields = ['date', 'value'];
