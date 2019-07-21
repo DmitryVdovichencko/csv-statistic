@@ -3,6 +3,25 @@ Function for converting data from result of paparse library. Here we ignore firs
 Then we find date and time using regexp and create date value for date prop. At the end we add value property and return array with date and value.
 Also we can filter data by filter array. If we define filter function we have to use filter array to check values.
 */
+export const convertRow = (row, resArr=[]) => {
+	const data = row.data, checkArr=[];
+	if (data[1]){
+
+			
+			let day = data[1].match(/\d+\d+?/g);
+			day = day.reverse().join('-');
+			
+			
+			let date = Date.parse(`${day}T${data[2]}`), value = data[3];
+			checkArr.push({date:date, value:value});
+			
+			resArr.push({date:date, value:value});
+		} 
+}
+export const getResult = (resArr=[]) => {
+	
+	return Promise.resolve(resArr);
+}
 export const convert = (results) => {
 	
 	
@@ -52,6 +71,7 @@ export const setTimeFilter = (timeDelta, basicData)=>{
 If check value is in some of limits array - return true.
 */
 export const checkValue = (value, limitArr) => {
+	
 	  return limitArr.some(
            function(limits) 
            {
@@ -64,9 +84,10 @@ Function for filtering array by time using time array.
 */
 
 export const filterData = (filterArr, filteringArr) => {
+	
 	filteringArr = filteringArr.filter((item)=>{
 		return checkValue(item.date,filterArr);
 	})
-	console.log(filteringArr);
+	
 	return Promise.resolve(filteringArr);
 }

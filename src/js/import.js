@@ -1,42 +1,64 @@
 // import csv files from csv folder using papaparse library
 const Papa = require('papaparse');
-
+import * as data from './data'
+import * as exportData from './export'
 /*
 Parse csv files from csv folder using convertData function.
 */
 
-// const parse = (file) => {
-// 	const csvData = Papa.parse(file, {
-// 		encoding:"utf8",
-// 	    delimiter: ' ',
-// 		complete: function(results) {
-// 			let res = results.data;
-// 			}
-// 		});
-// }
-// export const getData = (res) => {
-// 	parse(file);
-// 	setTimeout(()=> {
-// 		console.log(res);
-// 		return(res);
-// 	}, 1500);
-// }
 
 // Promise
 
-export const getData = (file) => {
-  return new Promise(function(complete, error) {
-  	
-    Papa.parse(file, 
+export const getData = (infile,outArr,outfile,write,filterFunc) => {
+ 
+  	const resArr=[];
+    Papa.parse(infile, 
     	{
     		encoding:"utf8",
     		delimiter: ' ',
-   //  		step: function(row) {
-			// 	res.push(row.data);
-			// },
-    		complete, 
-    		error});
-  });
+    		worker: true,
+    		step: function(row) {
+				data.convertRow(row,resArr)
+				
+			},
+    		complete:function(){
+
+    			data.getResult(resArr)	
+    			.then(
+				results => {
+					outArr.push(...results);
+					return Promise.resolve(outArr);
+					}
+				)
+				.then(
+					output => {
+						if(filterFunc===undefined){
+							return exportData.unparse(output)
+						}
+						else{
+							
+							
+									return (
+										
+											filterFunc().then(
+												filtered=>exportData.unparse(filtered)
+											)
+										)	
+									
+										
+						
+							
+						}
+
+					}
+				)
+				.then(
+					csv => {if(write){return exportData.write(csv,outfile)}}
+				)
+    		}
+    	});
+   
+  
 };
 
 
