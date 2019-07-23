@@ -2,10 +2,11 @@ const Papa = require('papaparse');
 
 // Promise
 export const unparse = (data) => {
+
 	return Promise.resolve(Papa.unparse(data));
 }
 export const write = (content,file) =>{
-	console.log(content);
+	
    const blob = new Blob([content], { type: 'text/csv;charset=utf-8;' });
     if (navigator.msSaveBlob) { // IE 10+
         navigator.msSaveBlob(blob, filename);

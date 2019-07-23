@@ -44,7 +44,10 @@ tareData.addEventListener('change', function(){
 		tare,
 		"tare",
 		true,
-		function(){return data.filterData(data.setTimeFilter(5000, weight),tare)} 
+		data.filterData,
+		"date",
+		data.setTimeFilter(5000,weight)
+			
 		)
 
 })
