@@ -64,17 +64,26 @@ Function to set time filter for data. We have basicData array of objects with tw
 It returns time array of objects with two props: high time value and low time value.
 */ 
 
-export const setTimeFilter = (timeDelta, basicData)=>{
-	const timeArr=[];
+export const setPropFilter = (delta, basicData,baseProp)=>{
+	const limitArr=[];
 	
 	basicData.forEach((basepoint)=>{
-		const highLim = basepoint.date + timeDelta, lowLim = basepoint.date - timeDelta;
-		timeArr.push({high:highLim, low:lowLim})
+		const highLim = basepoint[baseProp] + delta, lowLim = basepoint[baseProp] - delta;
+		limitArr.push({high:highLim, low:lowLim})
 	})
 	
-	return timeArr;
+	return limitArr;
 }
-
+export const setSameFilter = (delta, basicData,baseProp)=>{
+	const limitArr=[];
+	
+	basicData.forEach((basepoint)=>{
+		const highLim = basepoint[baseProp] + delta, lowLim = basepoint[baseProp] - delta;
+		limitArr.push({high:highLim, low:lowLim})
+	})
+	
+	return limitArr;
+}
 /*
 If check value is in some of limits array - return true.
 */
@@ -88,9 +97,31 @@ export const checkValue = (value, limitArr) => {
            } 
         );
 }
+export const checkSame = (value,filterProp,resArr) => {
+	
+	if (resArr.length>0){
+		return (value!==resArr[resArr.length-1][filterProp])
+	}
+	else{
+		return true;
+	}
+}
 /*
 Function for filtering array by time using time array.
 */
+
+export function filterSameValue(filterArr,filterProp,resArr){
+	
+	
+	if (checkSame(this[filterProp],filterProp,resArr)){
+		
+		return this;
+	}
+	else{
+		return null
+	}
+
+}
 
 export function filterData(filterArr,filterProp){
 	
@@ -104,3 +135,7 @@ export function filterData(filterArr,filterProp){
 	}
 
 }
+
+	
+
+

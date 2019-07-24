@@ -5,9 +5,7 @@ import * as exportData from './export'
 /*
 Parse csv files from csv folder using convertData function.
 */
-function test(x) {
 
-}
 
 // Promise
 
@@ -29,7 +27,7 @@ export const getData = (infile,outArr,outfile,write,filterFunc,filterProp,filter
 							if(filterFunc!==undefined) {
 
 								const f = filterFunc.bind(item);
-								const value = f(filterArr,filterProp);
+								const value = f(filterArr,filterProp,resArr);
 								if(value){
 									resArr.push(value);
 								}
@@ -51,7 +49,7 @@ export const getData = (infile,outArr,outfile,write,filterFunc,filterProp,filter
     			.then(
 				results => {
 
-
+					
 					outArr.push(...results);
 
 					return Promise.resolve(outArr);

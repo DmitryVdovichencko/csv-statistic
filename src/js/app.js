@@ -22,20 +22,19 @@ const weightData = getElement("weight"),
 	  ch2Data = getElement("ch2"),
 	  ch3Data = getElement("ch3");
 
-const weight=[], tare=[];
+const weight=[], tare=[],ch1=[],ch2=[],ch3=[];
 weightData.addEventListener('change', function(){
 	
 	
-	importData.getData(weightData.files[0],weight,"weight",true)
-
-
-	
-
-
-}
-
-
+	importData.getData(
+		weightData.files[0],
+		weight,
+		"weight",
+		true,
+		data.filterSameValue,
+		"value"
 	);
+})
 
 tareData.addEventListener('change', function(){
 	
@@ -46,37 +45,53 @@ tareData.addEventListener('change', function(){
 		true,
 		data.filterData,
 		"date",
-		data.setTimeFilter(5000,weight)
+		data.setPropFilter(5000,weight,"date")
 			
 		)
 
 })
+ch1Data.addEventListener('change', function(){
 	
-// const fields = ['date', 'value'];
-// const json2csvParser = new Parser({ fields });
-// // setTimeout(function() { console.log(parseFile(tareData.files[0],tare,true,5000,weight)); }, 1000);
-// parseFile(tareData.files[0],tare,true,5000,weight);
+	importData.getData(
+		ch1Data.files[0],
+		ch1,
+		"ch1",
+		true,
+		data.filterData,
+		"date",
+		data.setPropFilter(5000,weight,"date")	
+		)
 
+})
+ch2Data.addEventListener('change', function(){
+	
+	importData.getData(
+		ch2Data.files[0],
+		ch2,
+		"ch2",
+		true,
+		data.filterData,
+		"date",
+		data.setPropFilter(5000,weight,"date")	
+			
+		)
 
-// console.log(parseFile(tareData.files[0],tare,true,5000,weight));
-// }
+})
+ch3Data.addEventListener('change', function(){
+	
+	importData.getData(
+		ch3Data.files[0],
+		ch3,
+		"ch3",
+		true,
+		data.filterData,
+		"date",
+		data.setPropFilter(5000,weight,"date")	
+		)
 
-// 	);
-// ch1Data.addEventListener('change', function(){
-// 	parseFile(ch1Data.files[0],ch1);
-// 	console.log(ch1);
+})
+	
 
-// });
-// ch2Data.addEventListener('change', function(){
-// 	 parseFile(ch2Data.files[0],ch2);
-// 	 console.log(ch2);
-
-// 	});
-// ch3Data.addEventListener('change', function(){
-// 	parseFile(ch3Data.files[0],ch3);
-// 	 console.log(ch3);
-
-// });
 
 
 
