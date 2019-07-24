@@ -3,8 +3,8 @@ Function for converting data from result of paparse library. Here we ignore firs
 Then we find date and time using regexp and create date value for date prop. At the end we add value property and return array with date and value.
 Also we can filter data by filter array. If we define filter function we have to use filter array to check values.
 */
-export const convertRow = (row, resArr=[]) => {
-	const data = row.data, checkArr=[];
+export const convertRow = (row) => {
+	const data = row.data;
 	if (data[1]){
 
 			
@@ -13,10 +13,17 @@ export const convertRow = (row, resArr=[]) => {
 			
 			
 			let date = Date.parse(`${day}T${data[2]}`), value = data[3];
-			checkArr.push({date:date, value:value});
 			
-			resArr.push({date:date, value:value});
-		} 
+			let item = {date:date, value:value};
+			
+			return Promise.resolve(item);
+	
+			
+			
+		} else{
+			return Promise.resolve(null);
+		}
+
 }
 export const getResult = (resArr=[]) => {
 	
@@ -57,16 +64,26 @@ Function to set time filter for data. We have basicData array of objects with tw
 It returns time array of objects with two props: high time value and low time value.
 */ 
 
-export const setTimeFilter = (timeDelta, basicData)=>{
-	const timeArr=[];
+export const setPropFilter = (delta, basicData,baseProp)=>{
+	const limitArr=[];
 	
 	basicData.forEach((basepoint)=>{
-		const highLim = basepoint.date + timeDelta, lowLim = basepoint.date - timeDelta;
-		timeArr.push({high:highLim, low:lowLim})
+		const highLim = basepoint[baseProp] + delta, lowLim = basepoint[baseProp] - delta;
+		limitArr.push({high:highLim, low:lowLim})
 	})
-	return timeArr;
+	
+	return limitArr;
 }
-
+export const setSameFilter = (delta, basicData,baseProp)=>{
+	const limitArr=[];
+	
+	basicData.forEach((basepoint)=>{
+		const highLim = basepoint[baseProp] + delta, lowLim = basepoint[baseProp] - delta;
+		limitArr.push({high:highLim, low:lowLim})
+	})
+	
+	return limitArr;
+}
 /*
 If check value is in some of limits array - return true.
 */
@@ -75,19 +92,50 @@ export const checkValue = (value, limitArr) => {
 	  return limitArr.some(
            function(limits) 
            {
+
              return value > limits.low && value < limits.high;
            } 
         );
+}
+export const checkSame = (value,filterProp,resArr) => {
+	
+	if (resArr.length>0){
+		return (value!==resArr[resArr.length-1][filterProp])
+	}
+	else{
+		return true;
+	}
 }
 /*
 Function for filtering array by time using time array.
 */
 
-export const filterData = (filterArr, filteringArr) => {
+export function filterSameValue(filterArr,filterProp,resArr){
 	
-	filteringArr = filteringArr.filter((item)=>{
-		return checkValue(item.date,filterArr);
-	})
 	
-	return Promise.resolve(filteringArr);
+	if (checkSame(this[filterProp],filterProp,resArr)){
+		
+		return this;
+	}
+	else{
+		return null
+	}
+
 }
+
+export function filterData(filterArr,filterProp){
+	
+	
+	if (checkValue(this[filterProp],filterArr)){
+		
+		return this;
+	}
+	else{
+		return null
+	}
+
+}
+
+	
+
+

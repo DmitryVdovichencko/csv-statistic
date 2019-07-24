@@ -9,7 +9,7 @@ Parse csv files from csv folder using convertData function.
 
 // Promise
 
-export const getData = (infile,outArr,outfile,write,filterFunc) => {
+export const getData = (infile,outArr,outfile,write,filterFunc,filterProp,filterArr) => {
  
   	const resArr=[];
     Papa.parse(infile, 
@@ -18,7 +18,29 @@ export const getData = (infile,outArr,outfile,write,filterFunc) => {
     		delimiter: ' ',
     		worker: true,
     		step: function(row) {
-				data.convertRow(row,resArr)
+
+				data.convertRow(row).then(
+					item =>
+					{
+						
+						if(item){
+							if(filterFunc!==undefined) {
+
+								const f = filterFunc.bind(item);
+								const value = f(filterArr,filterProp,resArr);
+								if(value){
+									resArr.push(value);
+								}
+								
+								
+							}
+							else {resArr.push(item)};
+						}
+						 	
+					}
+				
+					)
+				
 				
 			},
     		complete:function(){
@@ -26,31 +48,19 @@ export const getData = (infile,outArr,outfile,write,filterFunc) => {
     			data.getResult(resArr)	
     			.then(
 				results => {
+
+					
 					outArr.push(...results);
+
 					return Promise.resolve(outArr);
 					}
 				)
 				.then(
-					output => {
-						if(filterFunc===undefined){
-							return exportData.unparse(output)
-						}
-						else{
-							
-							
-									return (
-										
-											filterFunc().then(
-												filtered=>exportData.unparse(filtered)
-											)
-										)	
-									
-										
+					output =>{
 						
-							
-						}
-
+						return exportData.unparse(output);
 					}
+						
 				)
 				.then(
 					csv => {if(write){return exportData.write(csv,outfile)}}
