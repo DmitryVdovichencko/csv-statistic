@@ -48,10 +48,24 @@ const CSSLoader = {
     },
   ],
 };
+const ImagesLoader = {
+          
+    test: /\.(png|jpe?g|gif|svg)$/,
+    use: [
+    {
+      loader: 'file-loader',
+      options: {
+        name: '[name].[ext]',
+          outputPath: 'img/'
+      }
+    },
+  ],
+};
 
 module.exports = {
   JSLoader: JSLoader,
   ESLintLoader: ESLintLoader,
-  CSSLoader: CSSLoader
+  CSSLoader: CSSLoader,
+  ImagesLoader: ImagesLoader
 
 };

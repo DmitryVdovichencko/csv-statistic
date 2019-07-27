@@ -8,7 +8,8 @@ module.exports = {
     rules: [
       loaders.CSSLoader,
       loaders.JSLoader,
-      loaders.ESLintLoader
+      loaders.ESLintLoader,
+      loaders.ImagesLoader
    
     ]
   },
