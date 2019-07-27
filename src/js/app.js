@@ -1,5 +1,7 @@
 import '../scss/style.scss';
 import "../assets/img/csvLogo.svg";
+import "../assets/img/GitHubLogo.png";
+import "../assets/img/GitHub.png";
 import * as data from './data'
 import * as importData from './import'
 import * as exportData from './export'
