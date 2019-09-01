@@ -3,7 +3,7 @@ const loaders = require('./loaders');
 const plugins = require('./plugins');
 
 module.exports = {
-  entry: ["./src/js/app.js"],
+  entry: ["./src/js/App.js"],
   module: {
     rules: [
       loaders.CSSLoader,
